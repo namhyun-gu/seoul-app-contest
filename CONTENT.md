@@ -69,18 +69,18 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
   ...
   public abstract static class Adapter<VH extends ViewHolder> {
     ...
+
+    // 아래의 세 메소드는 무조건 구현을 해야한다
+    // View를 아래에서 생성하여 ViewHolder를 생성하는 메소드
+    @NonNull
+    public abstract VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType);
+
+    // ViewHolder의 View들에 데이터를 바인딩하는 메소드
+    public abstract void onBindViewHolder(@NonNull VH holder, int position);
+
+    // RecyclerView에게 ItemSet의 크기가 얼마인지 알려주는 메소드
+    public abstract int getItemCount();
   }
-
-  // 아래의 세 메소드는 무조건 구현을 해야한다
-  // View를 아래에서 생성하여 ViewHolder를 생성하는 메소드
-  @NonNull
-  public abstract VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType);
-
-  // ViewHolder의 View들에 데이터를 바인딩하는 메소드
-  public abstract void onBindViewHolder(@NonNull VH holder, int position);
-
-  // RecyclerView에게 ItemSet의 크기가 얼마인지 알려주는 메소드
-  public abstract int getItemCount();
 }
 ```
 
@@ -150,14 +150,13 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
 ## Activity (or Fragment) 에서 사용
 
 ```java
-// 이전 안드로이드 개발 시에는 findViewById를 사용할 때 저장하는 변수에 맞게
-// 캐스팅해야했지만 targetSdkVersion 이 26 이상이면 생략할 수 있다
-// 
-// targetSdkVersion 확인 : (앱 모듈)/build.gradle > android.defaultConfig 내 포함
 List<ToDo> todos = ...;
 ToDoAdapter adapter = new ToDoAdapter(todos); // 생성자에 itemSet 추가
 adapter.addTodo(new Todo(...)); // 함수를 통한 Item 추가
 
+// 이전 안드로이드 개발 시에는 findViewById를 사용할 때 저장하는 변수에 맞게
+// 캐스팅해야했지만 targetSdkVersion 이 26 이상이면 생략할 수 있다
+// (targetSdkVersion 확인 방법: (앱 모듈)/build.gradle > android.defaultConfig 내 포함)
 RecyclerView recyclerView = findViewById(R.id.recycler_view);
 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 // Item 들로 인해 RecyclerView 사이즈가 변경되어야한다면 false 로 하며,
