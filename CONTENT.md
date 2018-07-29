@@ -9,7 +9,7 @@
 
 ## Gradle에 추가
 ```gradle
-// AndroidX를 사용하지 않을 경우
+// AndroidX를 사용하지 않은 경우
 implementation 'com.android.support:recyclerview-v7:27.1.1' 
 
 // AndroidX를 사용할 경우
@@ -17,6 +17,8 @@ implementation "androidx.recyclerview:recyclerview:1.0.0-beta01"
 ```
 ## XML에 추가
 - 예시
+
+AndroidX를 사용하지 않은 경우
 ```xml
 <!-- activity_todo.xml -->
 <android.support.v7.widget.RecyclerView
@@ -30,6 +32,14 @@ implementation "androidx.recyclerview:recyclerview:1.0.0-beta01"
   <TextView android:id="@+id/tv_title" ... />
   <TextView android:id="@+id/tv_desc" ... />
 </LinearLayout>
+```
+AndroidX를 사용할 경우
+```xml
+<!-- activity_todo.xml -->
+<androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
 ```
 
 ## ViewHolder
@@ -147,6 +157,28 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
 }
 ```
 
+## LayoutManager
+
+- LayoutManager는 [LinearLayoutManager](https://developer.android.com/reference/android/support/v7/widget/LinearLayoutManager), [GridLayoutManager](https://developer.android.com/reference/android/support/v7/widget/GridLayoutManager), [StaggeredGridLayoutManager](https://developer.android.com/reference/android/support/v7/widget/StaggeredGridLayoutManager) 가 있다.
+  - LinearLayoutManager는 일반적인 리스트를 구현하기 위한 LayoutManager로서 세로로 나열되는 것이 기본이며 생성자를 통해 가로로 변경할 수 있다.
+  - GridLayoutManager는 동일한 크기의 그리드를 구성하기 위한 LayoutManager이다.
+  - StaggeredGridLayoutManager는 동일하지 않은 크기의 그리드를 구성하기 위한 LayoutManager이다.
+
+### LinearLayout
+
+- 정의된 내용
+```java
+// 이 생성자를 통해 생성하면 기본 방향인 세로로 생성되며, 정방향으로 리스트가 표현된다
+public LinearLayoutManager(Context context) {
+  this(context, RecyclerView.DEFAULT_ORIENTATION, false);
+}
+
+// 이 생성자를 통해 방향과 레이아웃 표현 순서를 역방향으로 지정할 수 있다
+// orientation에는 RecyclerView.HORIZONTAL, RecyclerView.VERTICAL를 넣어 방향을 지정한다
+// reverseLayout이 true일때 레이아웃은 end에서 start으로, false이면 start에서 end
+public LinearLayoutManager(Context context, @RecyclerView.Orientation int orientation, boolean reverseLayout)
+```
+
 ## Activity (or Fragment) 에서 사용
 
 ```java
@@ -179,7 +211,7 @@ recyclerView.setAdapter(mAdapter);
 
 - RecyclerView를 사용할 경우 각 아이템에 대한 터치 이벤트를 기본 어댑터로는 확인할 수 없는데, 터치 이벤트를 아래와 같이 직접 구현하면 사용할 수 있다. (전체를 터치하여 처리할 경우)
 
-> 예시 1 (Adapter 내부에서 처리)
+1. Adapter 내부에서 처리
 
 ```java
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
@@ -192,7 +224,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
     });
   }
 ```
-> 예시 2 (Adapter 외부에서 처리)
+2. Adapter 외부에서 처리
 
 ```java
 interface OnItemClickListener {
