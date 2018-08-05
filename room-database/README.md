@@ -20,13 +20,14 @@ AppDatabase db = AppDatabase.getInstance(getContext());
 MediaDao dao = db.mediaDao();
 ```
 
-3. Dao에 정의된 함수를 호출하여 사용하되, DB 작업은 메인 스레드에서 처리할 수 없으므로 정의된 AppExecutor를 사용하여 다른 스레드에서 호출한다.
+3. Dao에 정의된 함수를 호출하여 사용하되, DB 작업은 메인 스레드에서 처리할 수 없으므로 정의된 AppExecutors를 사용하여 다른 스레드에서 호출한다.
 ```java
 AppDatabase db = AppDatabase.getInstance(getActivity());
-new AppExecutors().getDiskIO().execute(() -> {
+AppExecutors executors = new AppExecutors();
+executors.diskIO().execute(() -> {
     Media media = ...;
-    db.mediaDao().insert();
-    new AppExecutors().getMainThread().execute(() -> { 
+    db.mediaDao().insert(media);
+    executors.mainThread().execute(() -> {
         // 메인 스레드에서 데이터 처리
         showMedia(media);
     });
