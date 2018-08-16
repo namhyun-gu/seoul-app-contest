@@ -34,8 +34,6 @@ runOnDiskIO(() -> {
     runOnMain(() -> {
         // 메인 스레드에서 데이터 처리
         showMedia(media);
-        return null;
     });
-    return null;
 });
 ```
