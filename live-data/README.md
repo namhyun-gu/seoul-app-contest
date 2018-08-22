@@ -17,8 +17,10 @@ https://developer.android.com/reference/android/arch/lifecycle/LiveData
 **LiveData 지원 함수**
 
 - LocationDao.loadAllWithLive()
-- MediaDao.loadAllWithLive()
-- SceneDao.loadAllWithLive()
+- SceneDao
+    - loadByRowIdWithLive(rowId)
+    - loadByIdWithLive(sceneId)
+    - loadAllAreCapturedWithLive()
 
 ```java
 AppDatabase db = AppDatabase.getInstance(...);
